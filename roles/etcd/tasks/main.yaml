@@ -1,0 +1,20 @@
+---
+- name: 安装 etcd
+  yum: name={{item}} state=present
+  with_items:
+        - etcd
+- name: 创建目录
+  shell: mkdir -p /var/lib/etcd
+
+- name: copy etcd.service 
+  template: src={{base_dir}}/roles/etcd/templates/etcd.service.j2  dest=/etc/systemd/system/etcd.service  mode=0755
+
+- name: 设置etcd自启动
+  service: name=etcd  state=started enabled=yes  daemon_reload=yes
+
+- name: copy script 
+  template: src={{base_dir}}/roles/etcd/templates/setflannel.sh.j2  dest=/root/setflannel.sh  mode=0755
+
+- name: run script
+  shell: sh /root/setflannel.sh
+

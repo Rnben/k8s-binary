@@ -1,0 +1,24 @@
+[k8s-master]
+11.11.11.111 name=master1  order=1 
+
+[k8s-node]
+11.11.11.112 name=master1
+
+[k8s-all:children]
+k8s-master
+k8s-node
+
+[all:vars]
+podimage=registry.cn-hangzhou.aliyuncs.com/google_containers/pause-amd64:3.1
+k8s_version=1.11.2
+vip=11.11.11.111
+base_dir=/Users/rnben/Desktop/k8s-binary
+FLANNEL_ETCD_PREFIX=/atomic.io/network
+
+# Pod 网段(Cluster CIDR)，部署前路由不可达，部署后路由可达(flanneld 保证)
+CLUSTER_CIDR=172.30.0.0/16
+
+# 服务网段(Service CIDR)，部署前路由不可达，部署后集群内部使用IP:Port可达
+SERVICE_CIDR=10.254.0.0/16
+
+cluster_dns=10.10.10.2

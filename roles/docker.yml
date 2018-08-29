@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: no
+  roles:
+  - { role: basic }
+  - { role: docker }
+
+- hosts: k8s-master
+  roles:
+  - { role: etcd, when: order is defined }
+

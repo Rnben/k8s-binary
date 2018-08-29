@@ -1,0 +1,32 @@
+---
+- name: copy kubernetes 二进制
+  copy: src={{base_dir}}/roles/node/files/{{item}} dest=/usr/local/bin/ mode=0755
+  with_items:
+        - kubelet
+        - kube-proxy
+        - kubectl
+
+- name: mkdir /etc/kubernetes/cfg
+  file: path=/etc/kubernetes/cfg state=directory
+
+- name: copy conf
+  template: src={{base_dir}}/roles/node/templates/kubelet.kubeconfig.j2  dest=/etc/kubernetes/cfg/kubelet.kubeconfig mode=0755
+
+- name: copy conf
+  template: src={{base_dir}}/roles/node/templates/{{item}}.conf.j2  dest=/etc/kubernetes/cfg/{{item}}.conf mode=0755
+  with_items:
+        - kubelet
+        - kube-proxy
+
+- name: copy service
+  template: src={{base_dir}}/roles/node/templates/{{item}}.service.j2  dest=/etc/systemd/system/{{item}}.service  mode=0755
+  with_items:
+        - kubelet
+        - kube-proxy
+
+
+- name: 自启动
+  service: name={{item}}  state=started enabled=yes  daemon_reload=yes
+  with_items:
+        - kubelet
+        - kube-proxy

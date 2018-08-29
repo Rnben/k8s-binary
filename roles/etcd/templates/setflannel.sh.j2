@@ -1,0 +1,9 @@
+#########################################################################
+# File Name: setflannel.sh
+# Description: setflannel.sh
+# Author: lkong
+# mail: lkong@tencent.com
+# Created Time: 2018-08-28 19:44:11
+#########################################################################
+#!/bin/bash
+etcdctl set {{FLANNEL_ETCD_PREFIX}}/config '{"Network":"'{{CLUSTER_CIDR}}'", "SubnetLen": 24, "Backend": {"Type": "vxlan"}}'

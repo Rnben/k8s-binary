@@ -1,0 +1,4 @@
+KUBE_LOGTOSTDERR="--logtostderr=true"
+KUBE_LOG_LEVEL="--v=4"
+NODE_HOSTNAME="--hostname-override={{ ansible_enp0s8.ipv4.address }}"
+KUBE_MASTER="--master=http://{{vip}}:8080"

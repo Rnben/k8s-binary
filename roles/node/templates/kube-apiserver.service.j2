@@ -1,0 +1,17 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+EnvironmentFile=-/etc/kubernetes/cfg/kube-apiserver.conf
+ExecStart=/usr/local/bin/kube-apiserver \
+${KUBE_LOGTOSTDERR} \
+${KUBE_LOG_LEVEL} \
+${KUBE_ETCD_SERVERS} \
+${KUBE_API_ADDRESS} \
+${KUBE_API_PORT} \
+${KUBE_ADVERTISE_ADDR} \
+${KUBE_ALLOW_PRIV} \
+${KUBE_SERVICE_ADDRESSES}
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

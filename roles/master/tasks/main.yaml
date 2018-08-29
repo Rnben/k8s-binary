@@ -1,0 +1,33 @@
+---
+- name: copy kubernetes 二进制
+  copy: src={{base_dir}}/roles/master/files/{{item}} dest=/usr/local/bin/ mode=0755
+  with_items:
+        - kube-apiserver
+        - kube-controller-manager
+        - kube-scheduler
+        - kubectl
+
+- name: dir
+  shell: mkdir -p /etc/kubernetes/cfg
+
+- name: copy conf
+  template: src={{base_dir}}/roles/master/templates/{{item}}.conf.j2  dest=/etc/kubernetes/cfg/{{item}}.conf  mode=777
+  with_items:
+      - kube-apiserver
+      - kube-scheduler
+      - kube-controller-manager
+
+- name: copy service
+  template: src={{base_dir}}/roles/master/templates/{{item}}.service.j2  dest=/etc/systemd/system/{{item}}.service  mode=777
+  with_items:
+      - kube-apiserver
+      - kube-scheduler
+      - kube-controller-manager
+
+
+- name: 自启动
+  service: name={{item}}  state=started enabled=yes  daemon_reload=yes
+  with_items:
+      - kube-apiserver
+      - kube-scheduler
+      - kube-controller-manager

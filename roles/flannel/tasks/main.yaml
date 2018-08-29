@@ -1,0 +1,11 @@
+---
+- name: 安装 flannel
+  yum: name={{item}} state=present
+  with_items:
+        - flannel
+- name: copy etcd.service 
+  template: src={{base_dir}}/roles/flannel/templates/flanneld.j2  dest=/etc/sysconfig/flanneld  mode=777
+
+- name: 设置flannel自启动
+  service: name=flanneld  state=started enabled=yes  daemon_reload=yes
+
